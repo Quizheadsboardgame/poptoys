@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POPULAR TOYS</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; /* Standard font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: transparent; /* Fully transparent background */
+            color: black; /* Standard text color */
+            text-align: center;
+        }
+
+        #quiz-container {
+            background-color: transparent; /* Fully transparent container */
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        #logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: white; /* Change the answer color to white */
+        }
+
+        #next-button {
+            background-color: white; /* Change background color to white */
+            color: black; /* Change text color to black for visibility */
+            border: 2px solid #ff9900; /* Optional: Add a border for better visibility */
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #next-button:hover {
+            background-color: #ffcc00; /* Change hover color for better effect */
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 0.5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+<div id="quiz-container">
+    <img id="logo" src="https://i.imgur.com/cyZ0Z21.png" alt="DC Comics Logo">
+    <h1>POPULAR TOYS</h1>
+    <div id="question-container">
+        <div class="question" id="question">Loading question...</div>
+        <div class="answer" id="answer">Loading answer...</div>
+        <button id="next-button" onclick="nextQuestion()">Next Question</button>
+    </div>
+</div>
+
+<script>
+    // Question and answers data
+    const quizData = [
+        { question: "Which toy company produces the Barbie doll?", answer: "Mattel" },
+        { question: "What is the name of the popular building toy that allows children to create structures using colorful plastic blocks?", answer: "LEGO" },
+        { question: "Which toy features a slingshot mechanism and is often made of foam?", answer: "Nerf Gun" },
+        { question: "What is the name of the famous teddy bear created by the Steiff company?", answer: "Teddy Bear" },
+        { question: "Which toy consists of small colored beads that can be fused together with heat?", answer: "Perler Beads" },
+        { question: "What is the name of the toy that involves a spinning top that can compete in battles?", answer: "Beyblade" },
+        { question: "Which doll brand features a line of dolls that are customizable with different outfits and accessories?", answer: "American Girl" },
+        { question: "What popular children's game involves passing a ring around a string?", answer: "Cat's Cradle" },
+        { question: "Which toy consists of a rectangular board and a set of letters used to create words?", answer: "Scrabble" },
+        { question: "Which toy involves building and racing small plastic cars on tracks?", answer: "Slot Cars" },
+        { question: "What is the name of the popular children's game that involves bouncing a ball into a hoop?", answer: "Basketball (as a toy set for kids)" },
+        { question: "What is the name of the toy that simulates the sound of a gun when you pull the trigger?", answer: "Cap Gun" },
+        { question: "Which toy features a soft body and a hand-painted face, often used for comfort by children?", answer: "Cuddly Doll" },
+        { question: "What is the name of the toy that allows kids to create and design their own jewelry?", answer: "Bead Kits" },
+        { question: "Which action figure line features characters from the animated series 'Teenage Mutant Ninja Turtles'?", answer: "TMNT Action Figures" },
+        { question: "What classic board game involves buying and trading properties?", answer: "Monopoly" },
+        { question: "What is the name of the classic toy that consists of a round base with sliding tiles to form a picture?", answer: "Sliding Puzzle" },
+        { question: "What is the name of the game that involves guessing words or phrases based on drawings?", answer: "Pictionary" },
+        { question: "What is the name of the toy that involves creating and coloring designs on paper?", answer: "Coloring Book or Art Supplies" },
+        { question: "What is the name of the toy that simulates cooking and comes with plastic food items?", answer: "Play Kitchen" },
+        { question: "What is the name of the popular game that involves rolling dice and moving pieces around a board to collect resources?", answer: "Settlers of Catan" },
+        { question: "What is the name of the classic toy that involves a maze with a metal ball?", answer: "Labyrinth Game" },
+        { question: "What is the name of the toy that uses magnetic pieces to create shapes and structures?", answer: "Magformers or Magnetic Tiles" },
+        { question: "What is the name of the puzzle toy that challenges players to fit pieces into a grid?", answer: "Tetris (as a game)" },
+        { question: "Which toy features characters from the animated series 'Adventure Time'?", answer: "Adventure Time Figures" },
+        { question: "What is the name of the classic wooden toy that consists of a cube with different shapes to fit into?", answer: "Shape Sorter" },
+        { question: "What is the name of the toy that simulates the experience of driving a car?", answer: "Toy Car or Race Track Set" },
+        { question: "Which brand produces a variety of educational toys designed to promote learning?", answer: "LeapFrog" },
+        { question: "What is the name of the toy that allows children to build and experiment with circuits?", answer: "Snap Circuits" },
+        { question: "What is the name of the toy that encourages creative building with a variety of shapes?", answer: "Tinkertoy" },
+        { question: "Which toy brand produces dolls that can be customized with different outfits and accessories?", answer: "Monster High or Bratz" },
+        { question: "What is the name of the plush toy that can be used as a pillow and is known for its cute face?", answer: "Squishmallow" },
+        { question: "Which toy brand features collectible miniature figures that often represent characters from movies and shows?", answer: "Funko Pop!" },
+        { question: "What is the name of the game where players use a slingshot to knock down structures made of blocks?", answer: "Angry Birds (the game inspired various toy lines)" },
+        { question: "Which toy features small figures that can be connected to create a larger model?", answer: "LEGO" },
+        { question: "What is the name of the toy that involves bouncing a ball on a paddle?", answer: "Paddle Ball" },
+        { question: "What is the name of the toy that involves a plastic tube with colorful balls that rattle when shaken?", answer: "Rattle Toy" },
+        { question: "What is the name of the toy that simulates a real pet, often made of soft materials?", answer: "Stuffed Animal" },
+        { question: "Which toy features small colorful plastic pieces that can be snapped together to create various designs?", answer: "LEGO" },
+        { question: "Which toy allows children to learn about science through fun experiments?", answer: "Science Kits" },
+        { question: "What is the name of the electronic toy that responds to voice commands?", answer: "Furby" },
+        { question: "What is the name of the toy that simulates the sound of a car engine?", answer: "Toy Car or Vehicle Sounds" },
+        { question: "What is the name of the classic toy that consists of a wooden stick with a round disk that can be thrown like a frisbee?", answer: "Hacky Sack" },
+        { question: "What is the name of the toy that allows children to create and design their own video games?", answer: "Game Development Kits or Scratch" },
+        { question: "Which toy is a simple wooden figure with a long string attached that you pull to make it walk?", answer: "Pull Toy" },
+        { question: "What is the name of the classic toy that involves balancing a wooden figure on a tightrope?", answer: "Tightrope Walker" },
+        { question: "Which toy allows kids to create their own miniature worlds using tiny figures and scenery?", answer: "Playmobil" },
+        { question: "What is the name of the toy that involves rolling a ball down a ramp to knock over pins?", answer: "Bowling Set for Kids" },
+        { question: "Which toy features colorful rubber bands used to create bracelets?", answer: "Rainbow Loom" },
+        { question: "What is the name of the game where players draw and guess words?", answer: "Charades or Taboo" },
+        { question: "Which toy brand is known for its range of action figures based on superhero characters from comic books?", answer: "Marvel Legends or DC Collectibles" },
+        { question: "What is the name of the popular handheld video game console created by Nintendo?", answer: "Nintendo Game Boy" },
+        { question: "What is the name of the game that involves stacking blocks to build a tower?", answer: "Jenga" },
+        { question: "What is the name of the game that involves spinning a top and trying to knock down your opponent's tops?", answer: "Beyblade" },
+        { question: "What is the name of the toy that consists of a colorful spinning disk that can create patterns?", answer: "Spirograph" },
+        { question: "What is the name of the toy that allows children to learn about numbers and counting through interactive play?", answer: "Educational Counting Toys" },
+        { question: "Which toy features characters from the popular animated series 'Toy Story'?", answer: "Toy Story Action Figures" },
+        { question: "What is the name of the electronic game that challenges players to repeat a sequence of lights and sounds?", answer: "Simon" },
+        { question: "What is the name of the plush toy that can be used for comfort and often comes in various animal shapes?", answer: "Stuffed Animal" },
+        { question: "Which toy features characters from the animated series 'My Little Pony'?", answer: "My Little Pony Figures" },
+        { question: "What is the name of the classic toy that consists of a spinning disk that makes music?", answer: "Music Box" },
+        { question: "Which toy allows children to create their own hairstyles and outfits for virtual characters?", answer: "Hair Salon Playsets or Digital Apps" },
+        { question: "What is the name of the toy that involves a simple device with two handles and a ball that bounces between them?", answer: "Paddle Ball" },
+        { question: "Which toy features a colorful plastic ball that is often used in sports?", answer: "Soccer Ball" },
+        { question: "What is the name of the popular toy that allows children to create intricate designs using colorful plastic pieces?", answer: "Perler Beads" },
+        { question: "Which popular toy features small figurines that are collectible and often represent characters from movies?", answer: "Funko Pop!" },
+        { question: "What is the name of the classic toy that involves stacking colorful rings on a pole?", answer: "Ring Stack" },
+        { question: "Which toy features characters that can be collected, traded, and played with?", answer: "Shopkins" },
+        { question: "What is the name of the game where players must guess a word based on clues given by other players?", answer: "Charades or Taboo" },
+        { question: "What is the name of the electronic toy that teaches children to code through fun games?", answer: "Osmo or Code-a-Pillar" }
+    ];
+
+    let currentQuestionIndex = 0;
+
+    // Shuffle the quiz data
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
+    // Start the quiz
+    shuffle(quizData);
+    showQuestion();
+
+    function showQuestion() {
+        const questionContainer = document.getElementById("question");
+        const answerContainer = document.getElementById("answer");
+
+        questionContainer.innerText = quizData[currentQuestionIndex].question;
+        answerContainer.innerText = "Loading answer...";
+
+        // Fade in effect
+        answerContainer.classList.remove("fadeIn");
+        answerContainer.classList.add("fadeOut");
+
+        setTimeout(() => {
+            answerContainer.innerText = quizData[currentQuestionIndex].answer;
+            answerContainer.classList.remove("fadeOut");
+            answerContainer.classList.add("fadeIn");
+        }, 500);
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < quizData.length) {
+            showQuestion();
+        } else {
+            const questionContainer = document.getElementById("question");
+            const answerContainer = document.getElementById("answer");
+            questionContainer.innerText = "Thank you for playing!";
+            answerContainer.innerText = "";
+            document.getElementById("next-button").style.display = "none"; // Hide the next button
+        }
+    }
+</script>
+
+</body>
+</html>
